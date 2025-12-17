@@ -2,14 +2,15 @@
 using namespace std;
 
 class admin{
-    private
+    private:
     string admin_user;    
     int admin_pass;
     public:
+}; 
+class user : public admin{
 
 
 };
-
 
 
 int main(){
