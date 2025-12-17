@@ -7,7 +7,7 @@ class admin{
     int admin_pass;
     public:kdll
 sdodmaladmal
-jjdjjdda
+jjdjjddasddsa
 };
 
 
