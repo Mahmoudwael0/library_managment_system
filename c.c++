@@ -5,7 +5,7 @@ class admin{
     private
     string admin_user;    
     int admin_pass;
-    public:
+    public:jfj
 
 
 };
