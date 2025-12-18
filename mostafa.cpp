@@ -1,4 +1,4 @@
-// adding part
+// adding part "this one is good for now till i add things to it (; 
 
 void addbook(vector<book>&) {
   book b;
@@ -27,8 +27,8 @@ cout<<"book added successfully.\n";
 
 
 
-// deleteing part
-
+// deleteing part not so sure about it yet
+ 
 void deletebook(vector<book>&books) {
   int id;
  cout<<"enter book ID to delete: ";
@@ -43,3 +43,4 @@ return;
 }
 cout <<"book is not found.\n";
 }
+
