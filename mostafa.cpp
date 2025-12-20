@@ -1,46 +1,22 @@
-// adding part "this one is good for now till i add things to it (; 
+// /books.delete func
+cout << "Select book number to delete: ";
+cin >> z;
 
-void addbook(vector<book>&) {
-  book b;
-cout <<"enter book id: ";
-cin>>b.id;
-cin.ignore();
-
-for (const auto& book : book) {
-  if (book.id == b.id) {
-     cout<< "this book ID is already there\n";
-  return;
-  }
-}
-
-cout <<"enter book title: ";
-getline(cin, b.tittle);
-
-cout <<"enter author name: ";
-getline(cin, b.author);
-
-b.isAvailabe=true;
-books.push_back(b);
-
-cout<<"book added successfully.\n";
+// Ensure the number is valid
+if (z <= 0) {
+    cout << "Invalid number!" << endl;
+} else {
+    books.deleteNode(z - 1, "books.txt"); // -1 because list is 0-indexed
 }
 
 
 
-// deleteing part not so sure about it yet
- 
-void deletebook(vector<book>&books) {
-  int id;
- cout<<"enter book ID to delete: ";
-cin >> id;
 
-for (auto it =books .being();it !=books.end(); ++it) {
-    if (it->id== id) {
-books.erase(it);
-cout<<"book is finally deleted.\n";
-return;
-    }
-}
-cout <<"book is not found.\n";
-}
+
+// add func
+cout << "Enter book name: ";
+cin.ignore(); // Clear input buffer
+getline(cin, bookname); // Allow multi-word book names
+
+books.addNode(bookname, "books.txt");
 
