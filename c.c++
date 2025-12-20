@@ -18,6 +18,26 @@ class linkedlist {
     linkedlist() {
         head = NULL;
     }
+void bubblesort(linkedlist &list,string filename="booksCopy.txt"){ {
+        if(list.head==NULL) return;
+        for(Node* i=list.head;i!=NULL;i=i->next){
+            for(Node* j=list.head;j->next!=NULL;j=j->next){
+                if(j->val > j->next->val){
+                    swap(j->val,j->next->val);
+                    swap(j->is_borrowed,j->next->is_borrowed);
+                }
+            }
+        }
+        ofstream copy(filename);
+        if(!copy.is_open()){
+            cout<<"ERROR";
+            return;
+        }
+        for(Node* temp=list.head;temp!=NULL;temp=temp->next){
+            string tempstat = (temp->is_borrowed)?"-borrowed":"-available";
+            copy<<temp->val<<tempstat<<endl;
+        }
+    } }
     void init(string value) {
         ifstream file(value);
         string line;
