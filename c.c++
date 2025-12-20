@@ -273,7 +273,7 @@ int main() {
     if(cho=='r'||cho=='R'){
 
     }
-    if(cho=='e',cho=='E'){
+    if(cho=='e'||cho=='E'){
         break;
     }
     books.print();
