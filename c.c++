@@ -5,9 +5,11 @@ class Node {
 public:
     string val;
     Node* next;
-    Node(string v) {
+    bool is_borrowed;
+    Node(string v, bool b=false) {
         val = v;
         next = NULL;
+        is_borrowed=b;
     }
 };
 
@@ -18,26 +20,50 @@ class linkedlist {
     linkedlist() {
         head = NULL;
     }
+//
     void init(string value) {
         ifstream file(value);
         string line;
+        string stat;
         if(file.is_open()) {
-            while(getline(file, line)) {
-                Node* newNode = new Node(line);
+            while(getline(file, line,'-')) {
+                getline(file,stat);
+                bool b=true;
+                if(stat.find("available")!=string::npos){
+                    b=false;
+                }
+                Node* newNode = new Node(line,b);
                 if(head == NULL) {
                     head = newNode;
-                } 
-                else {
-                    Node* temp = head;
-                    while(temp->next != NULL) {
-                        temp = temp->next;
-                    }
-                    temp->next = newNode;
+                    tail = newNode;
+                } else {
+                    tail->next = newNode;
+                    tail = newNode;
                 }
             }
             file.close();
         }
     }
+void bubblesort(linkedlist &list,string filename="booksCopy.txt"){ {
+        if(list.head==NULL) return;
+        for(Node* i=list.head;i!=NULL;i=i->next){
+            for(Node* j=list.head;j->next!=NULL;j=j->next){
+                if(j->val > j->next->val){
+                    swap(j->val,j->next->val);
+                    swap(j->is_borrowed,j->next->is_borrowed);
+                }
+            }
+        }
+        ofstream copy(filename);
+        if(!copy.is_open()){
+            cout<<"ERROR";
+            return;
+        }
+        for(Node* temp=list.head;temp!=NULL;temp=temp->next){
+            string tempstat = (temp->is_borrowed)?"-borrowed":"-available";
+            copy<<temp->val<<tempstat<<endl;
+        }
+    } }
 
     void push(string v){
         Node* newNode = new Node(v);
@@ -184,6 +210,49 @@ public:
         temp->val=temp->val+"Borrowed";
         return x;
     }
+// void borrowBook(linkedlist &list,string filename="books_with_stat.txt",int num){
+//      {
+//     string bookName;
+//     string line;
+//     cout<<"Enter the name of the book you want to borrow:"<<endl;
+//     cin.ignore();
+//     getline(cin,bookName);
+//     Node* temp=list.head;
+// for(int i=0;i<num;i++){
+//     while(temp!=NULL){
+//         if(temp->val==bookName){
+//             if(temp->val==bookName && temp->is_borrowed){
+//                 cout<<"it's borrowed";
+//                 cout<<"do you serch for another book? (y/n)"<<endl;
+//                 char ch;
+//                 cin>>ch;
+//                 if(tolower(ch)=='y'){
+//                     borrowBook(list);
+//                     return;
+//                 }
+//                 else
+//                     return;}}
+//             else if(temp->val==bookName && !temp->is_borrowed){
+//                 cout<<"You have borrowed "<<bookName<<endl;
+//                 temp->is_borrowed=true;
+//                 ofstream file(filename);
+//                 Node* temp2=list.head;
+//                 while(temp2!=NULL){
+//                     file<<temp2->val<<"-";
+//                     if(temp2->is_borrowed){
+//                         file<<"borrowed"<<endl;
+//                     }
+//                     else{
+//                         file<<"available"<<endl;
+//                     }
+//                     temp2=temp2->next;
+//                 }
+//                 return;
+//         }
+//         temp=temp->next;
+//     }
+//     //
+// }}};
 
     void print(Node* head) {
         Node* temp = head;
@@ -209,7 +278,7 @@ int main() {
     char cho;
     int z;
     user.init("users.txt");
-    books.init("books.txt");
+    books.init("books_with_stat.txt");
     hello();
     string uname=user.account();
     if(user.account()=="admin123"){
