@@ -18,26 +18,6 @@ class linkedlist {
     linkedlist() {
         head = NULL;
     }
-void bubblesort(linkedlist &list,string filename="booksCopy.txt"){ {
-        if(list.head==NULL) return;
-        for(Node* i=list.head;i!=NULL;i=i->next){
-            for(Node* j=list.head;j->next!=NULL;j=j->next){
-                if(j->val > j->next->val){
-                    swap(j->val,j->next->val);
-                    swap(j->is_borrowed,j->next->is_borrowed);
-                }
-            }
-        }
-        ofstream copy(filename);
-        if(!copy.is_open()){
-            cout<<"ERROR";
-            return;
-        }
-        for(Node* temp=list.head;temp!=NULL;temp=temp->next){
-            string tempstat = (temp->is_borrowed)?"-borrowed":"-available";
-            copy<<temp->val<<tempstat<<endl;
-        }
-    } }
     void init(string value) {
         ifstream file(value);
         string line;
@@ -77,6 +57,7 @@ void bubblesort(linkedlist &list,string filename="booksCopy.txt"){ {
         char check;
         int li=0,i=1;
         string usern,upass;
+        ofstream file("users.txt",ios::app);
         cout << "Do you have an account? (Y/n)" << endl;
         cin >> check;
         check=tolower(check);
@@ -119,6 +100,7 @@ void bubblesort(linkedlist &list,string filename="booksCopy.txt"){ {
                     upass[i]=tolower(upass[i]);
                 }
                 if(temp->next != NULL && temp->next->val == upass){
+                    file.close();
                     return usern;
                 }
                 li++;
@@ -127,18 +109,18 @@ void bubblesort(linkedlist &list,string filename="booksCopy.txt"){ {
             return account();
         }
         else if(check=='n'){
-            ofstream file("users.txt",ios::app);
+            
             while(i){
             cout << "Create a username:" << endl;
             cin >> usern;
             Node* temp=head;
-             while(temp != NULL){
+            while(temp != NULL){
                 if(temp->val == usern){
                     cout << "this user name unavailable."<< endl;
                     return account();
                 }
-                temp=temp->next;
-            }
+                    temp=temp->next;
+                }
             i=0;
         }
             cout << "Create a password (8):" << endl;
@@ -152,16 +134,21 @@ void bubblesort(linkedlist &list,string filename="booksCopy.txt"){ {
             file.close();
             return usern;
         }
-        return account();
+        else{
+            cout << "ERROR";
+        return account();}
     }
     void print() {
+        int y=0;
         Node* temp = head;
         while(temp != NULL) {
-            cout <<"1- "<< temp->val << endl;
+            y++;
+            cout << y <<"- "<< temp->val << endl;
             temp = temp->next;
         }
     }
     Node* gethead(){return head;}
+    //edit
     string getbook(int n){
         Node* temp=head;
         for(int i=0;i<n;i++){
@@ -185,6 +172,21 @@ public:
     void userdata(){
 
     }
+    //edit
+    void print(Node* head) {
+        Node* temp = head;
+        while(temp != NULL) {
+            cout << temp->val << endl;
+            temp = temp->next;
+        }
+
+    }
+    void cart(Node*head ,string k){
+        Node* temp=head;
+        t
+        
+    }
+
 };
 
 class userr{
@@ -196,7 +198,7 @@ public:
         bd=u;
         borro=b;
     }
-
+    //edit abdo
     string borrow(Node* head ,int nb){
         string x;
         Node*temp=head;
@@ -204,17 +206,28 @@ public:
             temp=temp->next;        
         }
         x=temp->val;
-        temp->val=temp->val+"Borrowed";
+
+        temp->val=temp->val+" --Borrowed--";
         return x;
     }
-
+    //edit
     void print(Node* head) {
         Node* temp = head;
         while(temp != NULL) {
             cout << temp->val << endl;
             temp = temp->next;
-        }
+        }}
+    void checkcart(Node* head, string k){
+        Node* temp=head;
+        while(temp->next!=NULL){
+        if (temp->val!=k){
+           for(int i=0;i<5;i++){
+            temp=temp->next;
+           }}
+
     }
+    }
+    
 };
 
 void hello(){
@@ -231,15 +244,15 @@ int main() {
     userr us(&books,&borrowdata);
     char cho, datacho;
     int z;
-    string bookname;
+    string bookname,zz;
     user.init("users.txt");
     books.init("books.txt");
     borrowdata.init("data.txt");
     hello();
     string uname=user.account();
-    if(user.account()=="admin123"){
+    if(uname=="admin123"){
         while(1){
-        cout << "choose data: (A=books   B=user)"<<endl;
+        cout << "choose data: (A=books   B=user  C=userdata)"<<endl;
         cin>>datacho;
         datacho=tolower(datacho);
         if(datacho=='a'||datacho=='b'){
@@ -248,8 +261,9 @@ int main() {
         cout <<"ERROR"<<endl;
     }
         while (1){
-        cout << "D=delete  A=add(only for books)  S=sort E=exit"<< endl;
+        cout << "D=delete  A=add(only for books)  S=sort  E=exit"<< endl;
         cin >> cho;
+        books.print();
         if(cho=='D'||cho=='d'){
             cout << "select item number to delete:"<<endl;
             cin >> z;
@@ -297,8 +311,13 @@ int main() {
         break;
     }
     books.print();
-    cout << "choose the book number: "<<endl;
-    cin >> z;
+    cout << "choose the book number: to search(s)  "<<endl;
+    cin >> zz;
+    if(zz>="a"&&zz<="z"){
+        continue;
+    }
+    else{
+        z=stoi(zz);
     while(1){
         cout << "are you sure?(Y/n) "<<endl;
         cin >> cho;
@@ -310,6 +329,7 @@ int main() {
         else if(cho=='N'||cho=='n'){
             break;
         }
-        else{cout << "error";}
-    }}}
-}
+        else{cout << "error"<<endl;
+            break;
+        }}
+    }}}}
