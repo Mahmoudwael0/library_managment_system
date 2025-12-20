@@ -12,9 +12,9 @@ public:
 };
 
 class linkedlist {
-private:
+    private:
     Node* head;
-public:
+    public:
     linkedlist() {
         head = NULL;
     }
@@ -39,9 +39,23 @@ public:
         }
     }
 
+    void push(string v){
+        Node* newNode = new Node(v);
+        if(head == NULL){
+            head = newNode;
+        }
+        else{
+            Node* temp = head;
+            while(temp->next != NULL){
+                temp = temp->next;
+            }
+            temp->next = newNode;
+        }
+    }
+
     string account(){
         char check;
-        int li=0,i=0;
+        int li=0,i=1;
         string usern,upass;
         cout << "Do you have an account? (Y/n)" << endl;
         cin >> check;
@@ -49,6 +63,16 @@ public:
         if(check=='y'){
             cout << "User name:" << endl;
             cin >> usern;
+            if(usern=="admin123"){
+                cout << "passowrd: " << endl;
+                cin >> upass;
+                if(upass=="123456"){
+                    return usern;
+                }
+                else{
+                    return account();
+                }
+            }
             Node* temp = head;
             while(temp != NULL){
                 if(temp->val == usern){
@@ -95,6 +119,7 @@ public:
                 }
                 temp=temp->next;
             }
+            i=0;
         }
             cout << "Create a password (8):" << endl;
             cin >> upass;
@@ -116,33 +141,96 @@ public:
             temp = temp->next;
         }
     }
+    Node* gethead(){return head;}
+    string getbook(int n){
+        Node* temp=head;
+        for(int i=0;i<n;i++){
+            temp=temp->next;
+        }
+        return temp->val;
+    }
 };
+
 class admin{
 private:
+    linkedlist* users;
+    linkedlist* book;
+    linkedlist* datas;
 public:
+    admin(linkedlist* u,linkedlist* b, linkedlist* d){
+        users=u;
+        book=b;
+        datas=d;
+    }
 };
-class user : public admin{
+
+class userr{
 private:
+    linkedlist* borro;
+    linkedlist* bd;
 public:
+    userr(linkedlist* u,linkedlist* b){
+        bd=u;
+        borro=b;
+    }
 
+    string borrow(Node* head ,int nb){
+        string x;
+        Node*temp=head;
+        for (int i=0;i<nb;i++){
+            temp=temp->next;        
+        }
+        x=temp->val;
+        temp->val=temp->val+"Borrowed";
+        return x;
+    }
+
+    void print(Node* head) {
+        Node* temp = head;
+        while(temp != NULL) {
+            cout << temp->val << endl;
+            temp = temp->next;
+        }
+    }
 };
-
 
 void hello(){
-    cout <<"  ||    ||   =======    ||         ||            ===         " << endl;
+    cout <<"  ||    ||   =======    ||         ||          //===\\\\         " << endl;
     cout <<"  ||    ||   ||         ||         ||         //     \\\\    " << endl;
     cout <<"  ||====||   ||=====    ||         ||        ||       ||     " << endl;
-    cout <<"  ||    ||   ||         ||         ||        \\\\      //    " << endl;
-    cout <<"  ||    ||   =======    =======    =======       ===         " << endl;
+    cout <<"  ||    ||   ||         ||         ||         \\\\     //    " << endl;
+    cout <<"  ||    ||   =======    =======    =======     \\\\===//       " << endl;
 }
 
 int main() {
-    linkedlist books , user;
+    linkedlist books , user , data, borrowdata;
+    admin ad(&user,&books,&borrowdata);
+    userr us(&books,&borrowdata);
+    char cho;
+    int z;
     user.init("users.txt");
-    string u = user.account();
-    cout << "Welcome " << u << endl;
-    hello();
     books.init("books.txt");
+    hello();
+    string uname=user.account();
+    if(user.account()=="admin123"){
+        cout << "D=delete  A=add  pu=print users  pd=print data"
+    }
+    else{
+    cout << "note: each pearson can take at most 4 books. "<<endl;
     books.print();
-    return 0;
+    cout << "choose the book number:"<<endl;
+    cin >> z;
+    while(1){
+        cout << "are you sure?(Y/n) "<<endl;
+        cin >> cho;
+        if(cho=='Y'||cho=='y'){
+            borrowdata.push(us.borrow(books.gethead(),z));
+            break;
+        }
+        else if(cho=='N'||cho=='n'){
+            break;
+        }
+        else{cout << "error";}
+    }}
+    borrowdata.print();
 }
