@@ -183,7 +183,8 @@ public:
     }
     void cart(Node*head ,string k){
         Node* temp=head;
-        t
+        
+
         
     }
 
@@ -255,40 +256,29 @@ int main() {
         cout << "choose data: (A=books   B=user  C=userdata)"<<endl;
         cin>>datacho;
         datacho=tolower(datacho);
-        if(datacho=='a'||datacho=='b'){
+        if(datacho=='a'||datacho=='b'||datacho=='c'){
             break;
         }
         cout <<"ERROR"<<endl;
     }
+    if (datacho=='A'||datacho=='a'){
         while (1){
-        cout << "D=delete  A=add(only for books)  S=sort  E=exit"<< endl;
+        cout << "D=delete  A=add(books)  S=sort  E=exit"<< endl;
         cin >> cho;
         books.print();
         if(cho=='D'||cho=='d'){
             cout << "select item number to delete:"<<endl;
-            cin >> z;
-            if (datacho=='a'){
-            //books.delete func;
-            }
-            else if(datacho=='b'){
-                //borrowdata.deletfunc;
-            }
-
-            
-            break;
+           cin >> z;
+           //mostafa
         }
-        else if(cho=='a'||cho=='A'){
-            cout << "Book name:"<<endl;
-            cin >> bookname;
-            //add func;
-        }
-        else if(cho=='s'||cho=='S'){
-            if (datacho=='a'){
-            //usersort func;
+        else if (cho=='a'||cho=='A'){
+            cout << "name of the book: "<<endl;
+            cin >> zz;
+            //mostafa
             }
-            else if(datacho=='b'){
-                //user sort funcc;
-            }
+        else if (cho=='s',cho=='S'){
+            //mostafa
+            books.print();
         }
         else if(cho=='e'||cho=='E'){
             break;
@@ -296,10 +286,10 @@ int main() {
         else{
             cout <<"ERROR"<<endl;
         }
+        }
     }
-
-
-    }
+    
+}
     else{
         while(1){
     cout << "note: each pearson can take at most 4 books.  (E=exit  ,  to borrow=press any key  ,  r=return book) "<<endl;
@@ -333,3 +323,4 @@ int main() {
             break;
         }}
     }}}}
+
