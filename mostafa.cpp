@@ -1,22 +1,96 @@
-// /books.delete func
-cout << "Select book number to delete: ";
-cin >> z;
+    void saveToFile(string filename) {//mostafa
+    ofstream file(filename);
+    Node* temp = head;
+    while (temp != NULL) {
+        file << temp->val << endl;
+        temp = temp->next;
+    }
+    file.close();
+}
+    
+    //////mostafa
+void removeAt(int index) {
+    if (head == NULL) return;
 
-// Ensure the number is valid
-if (z <= 0) {
-    cout << "Invalid number!" << endl;
-} else {
-    books.deleteNode(z - 1, "books.txt"); // -1 because list is 0-indexed
+    if (index == 1) {
+        Node* del = head;
+        head = head->next;
+        delete del;
+        return;
+    }
+
+    Node* temp = head;
+    for (int i = 1; temp->next != NULL && i < index - 1; i++) {
+        temp = temp->next;
+    }
+
+    if (temp->next == NULL) return;
+
+    Node* del = temp->next;
+    temp->next = del->next;
+    delete del;
+}
+
+///mostafa
+void sortList() {
+    if (head == NULL || head->next == NULL) return;
+
+    for (Node* i = head; i != NULL; i = i->next) {
+        for (Node* j = i->next; j != NULL; j = j->next) {
+            if (i->val > j->val) {
+                swap(i->val, j->val);
+            }
+        }
+    }
+}
+void renameBook(int index, string newName) { //////mostafa
+    if (head == NULL) return;
+
+    Node* temp = head;
+    for (int i = 1; temp != NULL && i < index; i++) {
+        temp = temp->next;
+    }
+
+    if (temp == NULL) return;
+
+    temp->val = newName;
 }
 
 
 
 
 
-// add func
-cout << "Enter book name: ";
-cin.ignore(); // Clear input buffer
-getline(cin, bookname); // Allow multi-word book names
 
-books.addNode(bookname, "books.txt");
+string uname=user.account();
+    if(uname=="admin123"){
+        while(1){
+        cout << "choose data: (A=books   B=user  C=userdata)"<<endl;
+        cin>>datacho;
+        datacho=tolower(datacho);
+        if(datacho=='a'||datacho=='b'||datacho=='c'){
+            break;
+        }
+        cout <<"ERROR"<<endl;
+    }
+    if (datacho=='A'||datacho=='a'){
+        while (1){
+        cout << "D=delete  A=add(books)  S=sort  E=exit"<< endl;
+        cin >> cho;
+        books.print();
+        if(cho=='D'||cho=='d'){
+            cout << "select item number to delete:"<<endl;
+            cin >> z;
+        
+            books.removeAt(z);
+            books.saveToFile("books.txt");
+        
+            cout << "Book deleted successfully." << endl;
+        }
 
+        else if (cho=='a'||cho=='A'){
+            cout << "name of the book: "<<endl;
+            cin >> zz;
+            books.push(zz);
+            books.saveToFile("books.txt");
+            cout << "Book added successfully." << endl;
+        }
