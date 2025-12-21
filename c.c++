@@ -5,18 +5,16 @@ class Node {
 public:
     string val;
     Node* next;
-    bool is_borrowed;
-    Node(string v,bool b=false) {
+    Node(string v) {
         val = v;
         next = NULL;
-        is_borrowed=b;
     }
 };
 
 class linkedlist {
-    private:
+private:
     Node* head;
-    public:
+public:
     linkedlist() {
         head = NULL;
     }
@@ -40,41 +38,38 @@ class linkedlist {
             file.close();
         }
     }
-void bubblesort(linkedlist &list,string filename="books_with_stat.txt"){ {
-        if(list.head==NULL) return;
-        for(Node* i=list.head;i!=NULL;i=i->next){
-            for(Node* j=list.head;j->next!=NULL;j=j->next){
-                if(j->val > j->next->val){
-                    swap(j->val,j->next->val);
-                    swap(j->is_borrowed,j->next->is_borrowed);
-                }
-            }
+    void cart(string sss) {
+    Node* newn = new Node(sss);
+    if (head == NULL) {
+        head = newn;
+    } 
+    else {
+        Node* temp = head;
+        while (temp->next != NULL) {
+            temp = temp->next;
         }
-        ofstream copy(filename);
-        if(!copy.is_open()){
-            cout<<"ERROR";
-            return;
-        }
-        for(Node* temp=list.head;temp!=NULL;temp=temp->next){
-            string tempstat = (temp->is_borrowed)?" -borrowed":" -available";
-            copy<<temp->val<<tempstat<<endl;
-        }
-    } }
-
-    void push(string v){
-        Node* newNode = new Node(v);
-        if(head == NULL){
-            head = newNode;
-        }
-        else{
-            Node* temp = head;
-            while(temp->next != NULL){
-                temp = temp->next;
-            }
-            temp->next = newNode;
-        }
+        temp->next = newn;
     }
 
+    Node* current = newn;
+    for (int i = 0; i < 4; i++) {
+        Node* newnode = new Node("-");
+        current->next = newnode;
+        current = newnode;
+    }
+}
+    void printcart(){
+        Node* temp = head;
+        int i=1;
+        while(temp != NULL) {
+            if(i%6==0){
+                cout <<endl;
+            }
+            i++;
+            cout << temp->val << " -> ";
+            temp = temp->next;
+        }
+    }
     string account(){
         char check;
         int li=0,i=1;
@@ -131,20 +126,24 @@ void bubblesort(linkedlist &list,string filename="books_with_stat.txt"){ {
             return account();
         }
         else if(check=='n'){
-            
             while(i){
-            cout << "Create a username:" << endl;
-            cin >> usern;
-            Node* temp=head;
-            while(temp != NULL){
-                if(temp->val == usern){
+                cout << "Create a username:" << endl;
+                cin >> usern;
+                Node* temp=head;
+                bool found=false;
+                while(temp != NULL){
+                    if(temp->val == usern){
+                        found=true;
+                        break;
+                    }
+                    temp=temp->next;
+                }
+                if(found){
                     cout << "this user name unavailable."<< endl;
                     return account();
                 }
-                    temp=temp->next;
-                }
-            i=0;
-        }
+                i=0;
+            }
             cout << "Create a password (8):" << endl;
             cin >> upass;
             while(upass.size()!=8){
@@ -158,8 +157,10 @@ void bubblesort(linkedlist &list,string filename="books_with_stat.txt"){ {
         }
         else{
             cout << "ERROR";
-        return account();}
+            return account();
+        }
     }
+
     void print() {
         int y=0;
         Node* temp = head;
@@ -169,14 +170,16 @@ void bubblesort(linkedlist &list,string filename="books_with_stat.txt"){ {
             temp = temp->next;
         }
     }
+
     Node* gethead(){return head;}
-    //edit
+
     string getbook(int n){
         Node* temp=head;
-        for(int i=0;i<n;i++){
+        for(int i=0;i<n && temp!=NULL;i++){
             temp=temp->next;
         }
-        return temp->val;
+        if(temp!=NULL) return temp->val;
+        return "";
     }
 };
 
@@ -191,23 +194,13 @@ public:
         book=b;
         datas=d;
     }
-    void userdata(){
 
-    }
-    //edit
     void print(Node* head) {
         Node* temp = head;
         while(temp != NULL) {
             cout << temp->val << endl;
             temp = temp->next;
         }
-
-    }
-    void cart(Node*head ,string k){
-        Node* temp=head;
-        
-
-        
     }
 
 };
@@ -221,36 +214,25 @@ public:
         bd=u;
         borro=b;
     }
-    //edit abdo
-    string borrow(Node* head ,int nb){
-        string x;
-        Node*temp=head;
-        for (int i=0;i<nb;i++){
-            temp=temp->next;        
-        }
-        x=temp->val;
 
+    string borrow(Node* head ,int nb){
+        Node* temp=head;
+        for(int i=0;i<nb && temp!=NULL;i++){
+            temp=temp->next;
+        }
+        if(temp==NULL) return "";
+        string x=temp->val;
         temp->val=temp->val+" --Borrowed--";
         return x;
     }
-    //edit
+
     void print(Node* head) {
         Node* temp = head;
-        while(temp != NULL) {
+        while(temp != NULL){
             cout << temp->val << endl;
-            temp = temp->next;
-        }}
-    void checkcart(Node* head, string k){
-        Node* temp=head;
-        while(temp->next!=NULL){
-        if (temp->val!=k){
-           for(int i=0;i<5;i++){
             temp=temp->next;
-           }}
-
+        }
     }
-    }
-    
 };
 
 void hello(){
@@ -266,7 +248,7 @@ int main() {
     admin ad(&user,&books,&borrowdata);
     userr us(&books,&borrowdata);
     char cho, datacho;
-    int z;
+    int z,iii=1;
     string bookname,zz;
     user.init("users.txt");
     books.init("books.txt");
@@ -275,76 +257,68 @@ int main() {
     string uname=user.account();
     if(uname=="admin123"){
         while(1){
-        cout << "choose data: (A=books   B=user  C=userdata)"<<endl;
-        cin>>datacho;
-        datacho=tolower(datacho);
-        if(datacho=='a'||datacho=='b'||datacho=='c'){
-            break;
-        }
-        cout <<"ERROR"<<endl;
-    }
-    if (datacho=='A'||datacho=='a'){
-        while (1){
-        cout << "D=delete  A=add(books)  S=sort  E=exit"<< endl;
-        cin >> cho;
-        books.print();
-        if(cho=='D'||cho=='d'){
-            cout << "select item number to delete:"<<endl;
-           cin >> z;
-           //mostafa
-        }
-        else if (cho=='a'||cho=='A'){
-            cout << "name of the book: "<<endl;
-            cin >> zz;
-            //mostafa
-            }
-        else if (cho=='s',cho=='S'){
-            //mostafa
-            books.print();
-        }
-        else if(cho=='e'||cho=='E'){
-            break;
-        }
-        else{
+            cout << "choose data: (A=books   B=user  C=userdata)"<<endl;
+            cin>>datacho;
+            datacho=tolower(datacho);
+            if(datacho=='a'||datacho=='b'||datacho=='c') break;
             cout <<"ERROR"<<endl;
         }
+        if (datacho=='a'){
+            while (1){
+                cout << "D=delete  A=add  S=sort  E=exit"<< endl;
+                cin >> cho;
+                books.print();
+                if(cho=='D'||cho=='d'){
+                    cout << "select item number to delete:"<<endl;
+                    cin >> z;
+                }
+                else if(cho=='a'||cho=='A'){
+                    cout << "name of the book: "<<endl;
+                    cin >> zz;
+                }
+                else if(cho=='s'||cho=='S'){
+                    books.print();
+                }
+                else if(cho=='e'||cho=='E'){
+                    break;
+                }
+                else cout <<"ERROR"<<endl;
+            }
+        }
+        else if(datacho=='b'){
+            user.print();
+        }
+        else if(datacho=='c'){
+            borrowdata.printcart();
         }
     }
-    
-}
     else{
         while(1){
-    cout << "note: each pearson can take at most 4 books.  (E=exit  ,  to borrow=press any key  ,  r=return book) "<<endl;
-    cin >> cho;
-    if(cho=='r'||cho=='R'){
-
-    }
-    if(cho=='e'||cho=='E'){
-        break;
-    }
-    //sort before print
-    books.bubblesort(books)
-    books.print();
-    cout << "choose the book number: to search(s)  "<<endl;
-    cin >> zz;
-    if(zz>="a"&&zz<="z"){
-        continue;
-    }
-    else{
-        z=stoi(zz);
-    while(1){
-        cout << "are you sure?(Y/n) "<<endl;
-        cin >> cho;
-        //abdo
-        if(cho=='Y'||cho=='y'){
-            borrowdata.push(us.borrow(books.gethead(),z));
-            break;
+            borrowdata.cart(uname);
+            cout << "note: each pearson can take at most 4 books.  (E=exit  ,  to borrow=press any key  ,  c=show yourcart) "<<endl;
+            cin >> cho;
+            if(cho=='C'||cho=='c'){borrowdata.printcart(); cout << endl ;continue;}
+            if(cho=='e'||cho=='E') break;
+            books.print();
+            cout << "choose the book number: to search(s)  "<<endl;
+            cin >> zz;
+            bool isNumber=true;
+            for(char c: zz){
+                if(!isdigit(c)) {isNumber=false; break;}
+            }
+            if(!isNumber) continue;
+            z=stoi(zz);
+            while(1){
+                cout << "are you sure?(Y/n) "<<endl;
+                cin >> cho;
+                if(cho=='Y'||cho=='y'){
+                    
+                    
+                    break;
+                }
+                else if(cho=='N'||cho=='n') break;
+                else{cout << "error"<<endl; break;}
+            }
         }
-        else if(cho=='N'||cho=='n'){
-            break;
-        }
-        else{cout << "error"<<endl;
-            break;
-        }}
-    }}}}
-
+    }
+}
