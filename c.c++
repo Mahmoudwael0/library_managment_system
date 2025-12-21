@@ -417,6 +417,7 @@ int main() {
             while (1){
                 cout << "D=delete  A=add  E=exit"<< endl;
                 cin >> cho;
+                books.bubblesort(books);
                 books.print();
                 if(cho=='D'||cho=='d'){
                     cout << "select item number to delete:"<<endl;
