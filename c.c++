@@ -1,6 +1,7 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <fstream>
+#include <string>
 using namespace std;
-
 class Node {
 public:
     string val;
@@ -38,26 +39,111 @@ public:
             file.close();
         }
     }
+    void saveToFile(string filename) {
+        ofstream file(filename);
+        if (file.is_open()) {
+            Node* temp = head;
+            while (temp != NULL) {
+                file << temp->val << endl; 
+                temp = temp->next;
+            }
+            file.close();
+        }
+    }
+    void bubblesort(linkedlist &list, string filename="books_with_stat.txt"){ 
+        for(Node* i=list.head; i!=NULL; i=i->next){
+            for(Node* j=list.head; j->next!=NULL; j=j->next){
+                if(j->val > j->next->val){
+                    swap(j->val, j->next->val);
+                }
+            }
+        }
+    }
     void cart(string sss) {
-    Node* newn = new Node(sss);
-    if (head == NULL) {
-        head = newn;
-    } 
-    else {
+        Node* checker = head;
+        while(checker != NULL) {
+            if(checker->val == sss) {
+                return; 
+            }
+            checker = checker->next;
+        }
+        Node* newn = new Node(sss);
+        if (head == NULL) {
+            head = newn;
+        } 
+        else {
+            Node* temp = head;
+            while (temp->next != NULL) {
+                temp = temp->next;
+            }
+            temp->next = newn;
+        }
+        Node* current = newn;
+        for (int i = 0; i < 4; i++) {
+            Node* newnode = new Node("-");
+            current->next = newnode;
+            current = newnode;
+        }
+    }
+void borrowItem(string username, string bookName) {
+        Node* globalScan = head;
+        while(globalScan != NULL) {
+            if(globalScan->val == bookName) {
+                cout << bookName << "' is currently borrowed by someone else." << endl;
+                return;
+            }
+            globalScan = globalScan->next;
+        }
         Node* temp = head;
-        while (temp->next != NULL) {
+        bool userFound = false;
+        while(temp != NULL) {
+            if(temp->val == username) {
+                userFound = true;
+                Node* slot = temp->next; 
+                for(int i = 0; i < 4; i++) {
+                    if(slot == NULL) break;
+                    if(slot->val == "-") {
+                        slot->val = bookName;
+                        cout << "Success! You borrowed: " << bookName << endl;
+                        saveToFile("data.txt");
+                        return;
+                    }
+                    slot = slot->next;
+                }
+                cout << "Your cart is full! (Max 4 books)" << endl;
+                return;
+            }
             temp = temp->next;
         }
-        temp->next = newn;
+        if(!userFound) cout << "Error: User cart not initialized." << endl;
     }
+    void returnItem(string username, string bookName) {
+        Node* temp = head;
+        bool userFound = false;
 
-    Node* current = newn;
-    for (int i = 0; i < 4; i++) {
-        Node* newnode = new Node("-");
-        current->next = newnode;
-        current = newnode;
+        // 1. Find the user node
+        while(temp != NULL) {
+            if(temp->val == username) {
+                userFound = true;
+                Node* slot = temp->next; 
+                for(int i = 0; i < 4; i++) {
+                    if(slot == NULL) break;
+                    if(slot->val == bookName) {
+                        slot->val = "-"; 
+                        cout << "Success! You returned: " << bookName << endl;
+                        saveToFile("data.txt"); 
+                        return;
+                    }
+                    slot = slot->next;
+                }
+                
+                cout << "Error: You don't have this book in your cart." << endl;
+                return;
+            }
+            temp = temp->next;
+        }
+        if(!userFound) cout << "Error: User cart not initialized." << endl;
     }
-}
     void printcart(){
         Node* temp = head;
         int i=1;
@@ -307,37 +393,59 @@ int main() {
             borrowdata.printcart();
         }
     }
-    else{
-        while(1){
-            borrowdata.cart(uname);
-            cout << "note: each pearson can take at most 4 books.  (E=exit  ,  to borrow=press any key  ,  c=show yourcart) "<<endl;
+    else {
+        borrowdata.cart(uname); 
+        while(1) {
+            cout << "note: each person can take at most 4 books. (E=exit , to borrow=press any key , c=show yourcart, r=return cart) " << endl;
             cin >> cho;
-            if(cho=='C'||cho=='c'){borrowdata.printcart(); cout << endl ;continue;}
-            if(cho=='e'||cho=='E') break;
-            books.print();
-            cout << "choose the book number: to search(s)  "<<endl;
-            //------------------------------------------
-           //-----------------------------------------
-            cin >> zz;
-            bool isNumber=true;
-            for(char c: zz){
-                if(!isdigit(c)) {isNumber=false; break;}
+            if(cho == 'C' || cho == 'c') {
+                borrowdata.printcart(); 
+                cout << endl; 
+                continue;
             }
-            if(!isNumber) continue;
-            z=stoi(zz);
-            while(1){
-                cout << "are you sure?(Y/n) "<<endl;
+            if(cho == 'E' || cho == 'e') {
+                break;
+            }
+            if(cho == 'R' || cho == 'r') {
+                cout << "Enter the name of the book you want to return:" << endl;
+                cin.ignore();
+                getline(cin, bookname);
+                borrowdata.returnItem(uname, bookname);
+                continue;
+            }
+            books.print();
+            cout << "choose the book number: (or s to search) " << endl;
+            cin >> zz;
+            bool isNumber = true;
+            for(char c : zz) {
+                if(!isdigit(c)) { isNumber = false; break; }
+            }
+            if(!isNumber) {
+                cout << "Invalid selection. Please enter a number." << endl;
+                continue; 
+            }
+            z = stoi(zz);
+            while(1) {
+                cout << "Are you sure you want to borrow book #" << z << "? (Y/n) " << endl;
                 cin >> cho;
-                if(cho=='Y'||cho=='y'){
-                    //---------------------------------------------------------------||
-                   //----------------------------------------------------------------||
-                  //-----------------------------------------------------------------||
-                 //------------------------------------------------------------------||  
-                    break;
+                
+                if(cho == 'Y' || cho == 'y') {
+                    string selectedBook = books.getbook(z - 1);
+                    
+                    if(selectedBook != "") {
+                        borrowdata.borrowItem(uname, selectedBook);
+                    } else {
+                        cout << "Error: Book not found!" << endl;
+                    }
+                    break; 
                 }
-                else if(cho=='N'||cho=='n'){ break;}
-                else{cout << "error"<<endl; break;}
+                else if(cho == 'N' || cho == 'n') {
+                    break; 
+                }
+                else {
+                    cout << "Please enter Y or n" << endl;
+                }
             }
         }
     }}
-}
+}}
