@@ -5,9 +5,11 @@ class Node {
 public:
     string val;
     Node* next;
-    Node(string v) {
+    bool is_borrowed;
+    Node(string v,bool b=false) {
         val = v;
         next = NULL;
+        is_borrowed=b;
     }
 };
 
