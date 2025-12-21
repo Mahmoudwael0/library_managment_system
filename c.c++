@@ -115,7 +115,7 @@ void borrowItem(string username, string bookName) {
             }
             temp = temp->next;
         }
-        if(!userFound) cout << "Error: User cart not initialized." << endl;
+        if(!userFound) cout << "no cart" << endl;
     }
     void returnItem(string username, string bookName) {
         Node* temp = head;
