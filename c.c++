@@ -59,6 +59,59 @@ public:
             }
         }
     }
+   void deleteBP(int pos, string filename) {
+    if (head == NULL || pos <= 0) return;
+
+    if (pos == 1) {
+        Node* del = head;
+        head = head->next;
+        delete del;
+    } else {
+        Node* cur = head;
+        for (int i = 1; i < pos - 1 && cur->next != NULL; i++) {
+            cur = cur->next;
+        }
+        if (cur->next == NULL) return;
+        Node* del = cur->next;
+        cur->next = del->next;
+        delete del;
+    }
+
+    ifstream file(filename);
+    ofstream tempFile("temp.txt");
+    if (!file.is_open()) return;
+
+    string line;
+    int cnt = 1;
+    while (getline(file, line)) {
+        if (cnt != pos) {
+            tempFile << line << endl;
+        }
+        cnt++;
+    }
+
+    file.close();
+    tempFile.close();
+    remove(filename.c_str());
+    rename("temp.txt", filename.c_str());
+}
+void app(string value) {
+    Node* newNode = new Node(value);
+    if (head == NULL) {
+        head = newNode;
+    } else {
+        Node* temp = head;
+        while (temp->next != NULL) {
+            temp = temp->next;
+        }
+        temp->next = newNode;
+    }
+
+    ofstream file("books.txt", ios::app);
+    if (!file.is_open()) return;
+    file << value << endl;
+    file.close();
+}
     void cart(string sss) {
         Node* checker = head;
         while(checker != NULL) {
@@ -86,20 +139,20 @@ public:
         }
     }
 void borrowItem(string username, string bookName) {
-        Node* globalScan = head;
-        while(globalScan != NULL) {
-            if(globalScan->val == bookName) {
+        Node* temp = head;
+        while(temp != NULL) {
+            if(temp->val == bookName) {
                 cout << bookName << "' is currently borrowed by someone else." << endl;
                 return;
             }
-            globalScan = globalScan->next;
+            temp = temp->next;
         }
-        Node* temp = head;
+        Node* temp1 = head;
         bool userFound = false;
-        while(temp != NULL) {
-            if(temp->val == username) {
+        while(temp1 != NULL) {
+            if(temp1->val == username) {
                 userFound = true;
-                Node* slot = temp->next; 
+                Node* slot = temp1->next; 
                 for(int i = 0; i < 4; i++) {
                     if(slot == NULL) break;
                     if(slot->val == "-") {
@@ -113,7 +166,7 @@ void borrowItem(string username, string bookName) {
                 cout << "Your cart is full! (Max 4 books)" << endl;
                 return;
             }
-            temp = temp->next;
+            temp1 = temp1->next;
         }
         if(!userFound) cout << "no cart" << endl;
     }
@@ -121,7 +174,7 @@ void borrowItem(string username, string bookName) {
         Node* temp = head;
         bool userFound = false;
 
-        // 1. Find the user node
+        
         while(temp != NULL) {
             if(temp->val == username) {
                 userFound = true;
@@ -307,6 +360,17 @@ public:
             temp=temp->next;
         }
     }
+    void printyc(Node* head, string un){
+         Node* temp = head;
+        while(temp->val!=un&&temp!=NULL){
+            temp = temp->next;}
+            for(int i=0;i<5;i++){
+                if(i<4){
+                    cout << " ->";
+                }
+            cout << temp->val;
+            temp=temp->next;
+    }}
 };
 
 void hello(){
@@ -329,21 +393,21 @@ int main() {
     borrowdata.init("data.txt");
     hello();
     while(p){
-    cout << "Exit";
+    cout << "l=Exit"<<endl;
     cin >> cho;
-    if (cho=='l'||cho=='l'){
+    if (cho=='L'||cho=='l'){
         break;
     } 
     string uname=user.account();
     while(p){
-    cout << "Exit";
+    cout << "l=Exit"<<endl;
     cin >> cho;
-    if (cho=='l'||cho=='l'){
+    if (cho=='L'||cho=='l'){
         break;
     } 
     if(uname=="admin123"){
         while(1){
-            cout << "choose data: (A=books   B=user  C=userdata)"<<endl;
+            cout << "choose data: (A=books   B=user  C=show user data)"<<endl;
             cin>>datacho;
             datacho=tolower(datacho);
             if(datacho=='a'||datacho=='b'||datacho=='c') break;
@@ -351,22 +415,18 @@ int main() {
         }
         if (datacho=='a'){
             while (1){
-                cout << "D=delete  A=add  S=sort  E=exit"<< endl;
+                cout << "D=delete  A=add  E=exit"<< endl;
                 cin >> cho;
                 books.print();
                 if(cho=='D'||cho=='d'){
                     cout << "select item number to delete:"<<endl;
                     cin >> z;
-                    //------------------------
+                    books.deleteBP(z,"books.txt");
                 }
                 else if(cho=='a'||cho=='A'){
                     cout << "name of the book: "<<endl;
                     cin >> zz;
-                    //----------------------
-                }
-                else if(cho=='s'||cho=='S'){
-                    books.print();
-                    //---------------------
+                    books.app(zz);
                 }
                 else if(cho=='e'||cho=='E'){
                     break;
@@ -375,7 +435,25 @@ int main() {
             }
         }
         else if(datacho=='b'){
-            user.print();
+            while (1){
+                cout << "(a=add user  d=deletuser  s=show data e=exit)"<<endl;
+                cin >> cho;
+                if(cho=='D'||cho=='d'){
+                    cout << "select item number to delete:"<<endl;
+                    cin >> z;
+                    books.deleteBP(z,"books.txt");
+                }
+                else if(cho=='a'||cho=='A'){
+                    user.account();
+                }
+                else if(cho=='s'||cho=='S'){
+                    user.print();
+                }
+                else if(cho=='e'||cho=='E'){
+                    break;
+                }
+                else cout <<"ERROR"<<endl;
+            }
         }
         else if(datacho=='c'){
             borrowdata.printcart();
@@ -387,7 +465,7 @@ int main() {
             cout << "note: each person can take at most 4 books. (E=exit , to borrow=press any key , c=show yourcart, r=return cart) " << endl;
             cin >> cho;
             if(cho == 'C' || cho == 'c') {
-                borrowdata.printcart(); 
+                us.printyc(borrowdata.gethead(),uname);
                 cout << endl; 
                 continue;
             }
@@ -402,7 +480,7 @@ int main() {
                 continue;
             }
             books.print();
-            cout << "choose the book number: (or s to search) " << endl;
+            cout << "choose the book number: " << endl;
             cin >> zz;
             bool isNumber = true;
             for(char c : zz) {
@@ -414,7 +492,7 @@ int main() {
             }
             z = stoi(zz);
             while(1) {
-                cout << "Are you sure you want to borrow book #" << z << "? (Y/n) " << endl;
+                cout << "Are you sure you want to borrow book " << z << "? (Y/n) " << endl;
                 cin >> cho;
                 
                 if(cho == 'Y' || cho == 'y') {
