@@ -480,6 +480,7 @@ int main() {
                 borrowdata.returnItem(uname, bookname);
                 continue;
             }
+            books.bubblesort(books);
             books.print();
             cout << "choose the book number: " << endl;
             cin >> zz;
