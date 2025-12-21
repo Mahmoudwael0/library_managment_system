@@ -300,18 +300,6 @@ public:
         bd=u;
         borro=b;
     }
-
-    string borrow(Node* head ,int nb){
-        Node* temp=head;
-        for(int i=0;i<nb && temp!=NULL;i++){
-            temp=temp->next;
-        }
-        if(temp==NULL) return "";
-        string x=temp->val;
-        temp->val=temp->val+" --Borrowed--";
-        return x;
-    }
-
     void print(Node* head) {
         Node* temp = head;
         while(temp != NULL){
