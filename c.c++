@@ -38,6 +38,26 @@ class linkedlist {
             file.close();
         }
     }
+void bubblesort(linkedlist &list,string filename="books_with_stat.txt"){ {
+        if(list.head==NULL) return;
+        for(Node* i=list.head;i!=NULL;i=i->next){
+            for(Node* j=list.head;j->next!=NULL;j=j->next){
+                if(j->val > j->next->val){
+                    swap(j->val,j->next->val);
+                    swap(j->is_borrowed,j->next->is_borrowed);
+                }
+            }
+        }
+        ofstream copy(filename);
+        if(!copy.is_open()){
+            cout<<"ERROR";
+            return;
+        }
+        for(Node* temp=list.head;temp!=NULL;temp=temp->next){
+            string tempstat = (temp->is_borrowed)?" -borrowed":" -available";
+            copy<<temp->val<<tempstat<<endl;
+        }
+    } }
 
     void push(string v){
         Node* newNode = new Node(v);
@@ -300,6 +320,8 @@ int main() {
     if(cho=='e'||cho=='E'){
         break;
     }
+    //sort before print
+    books.bubblesort(books)
     books.print();
     cout << "choose the book number: to search(s)  "<<endl;
     cin >> zz;
