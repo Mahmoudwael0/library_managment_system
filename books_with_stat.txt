@@ -1,6 +1,6 @@
 To Kill a Mockingbird -available
 1984 -available
-Pride and Prejudice -borrowed
+Pride and Prejudice -available
 The Great Gatsby -available
 Moby Dick -available
 War and Peace -available
@@ -105,3 +105,4 @@ Lessons in Chemistry -available
 The Seven Husbands of Evelyn Hugo -available
 The Paris Library -available
 Atomic Habits -available
+
