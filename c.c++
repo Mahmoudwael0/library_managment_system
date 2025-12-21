@@ -248,13 +248,25 @@ int main() {
     admin ad(&user,&books,&borrowdata);
     userr us(&books,&borrowdata);
     char cho, datacho;
-    int z,iii=1;
+    int z,iii=1,p=1;
     string bookname,zz;
     user.init("users.txt");
     books.init("books.txt");
     borrowdata.init("data.txt");
     hello();
+    while(p){
+    cout << "Exit";
+    cin >> cho;
+    if (cho=='l'||cho=='l'){
+        break;
+    } 
     string uname=user.account();
+    while(p){
+    cout << "Exit";
+    cin >> cho;
+    if (cho=='l'||cho=='l'){
+        break;
+    } 
     if(uname=="admin123"){
         while(1){
             cout << "choose data: (A=books   B=user  C=userdata)"<<endl;
@@ -271,13 +283,16 @@ int main() {
                 if(cho=='D'||cho=='d'){
                     cout << "select item number to delete:"<<endl;
                     cin >> z;
+                    //------------------------
                 }
                 else if(cho=='a'||cho=='A'){
                     cout << "name of the book: "<<endl;
                     cin >> zz;
+                    //----------------------
                 }
                 else if(cho=='s'||cho=='S'){
                     books.print();
+                    //---------------------
                 }
                 else if(cho=='e'||cho=='E'){
                     break;
@@ -301,6 +316,8 @@ int main() {
             if(cho=='e'||cho=='E') break;
             books.print();
             cout << "choose the book number: to search(s)  "<<endl;
+            //------------------------------------------
+           //-----------------------------------------
             cin >> zz;
             bool isNumber=true;
             for(char c: zz){
@@ -312,13 +329,15 @@ int main() {
                 cout << "are you sure?(Y/n) "<<endl;
                 cin >> cho;
                 if(cho=='Y'||cho=='y'){
-                    
-                    
+                    //---------------------------------------------------------------||
+                   //----------------------------------------------------------------||
+                  //-----------------------------------------------------------------||
+                 //------------------------------------------------------------------||  
                     break;
                 }
-                else if(cho=='N'||cho=='n') break;
+                else if(cho=='N'||cho=='n'){ break;}
                 else{cout << "error"<<endl; break;}
             }
         }
-    }
+    }}
 }
